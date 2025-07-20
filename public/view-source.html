@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <script src="https://cdn.chand.web.id/anti_inspect.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freetools: View Source Website & HTML Code Checker</title>
+    <meta name="description" content="Dapatkan source code HTML, CSS, dan JavaScript dari website manapun secara instan dengan Freetools View Source Checker. Alat gratis untuk analisis web dan debugging.">
+    <meta name="keywords" content="view source, source code viewer, html checker, css checker, javascript checker, web analyzer, website source code, freetools, cek kode website, lihat source html, tools webmaster">
+    <meta name="author" content="ChandStore">
+    <meta property="og:title" content="Freetools: View Source Website & HTML Code Checker">
+    <meta property="og:description" content="Dapatkan source code HTML, CSS, dan JavaScript dari website manapun secara instan dengan Freetools View Source Checker. Alat gratis untuk analisis web dan debugging.">
+    <meta property="og:image" content="https://freetools.web.id/icon.ico">
+    <meta property="og:url" content="https://freetools.web.id/view-source">
+    <meta property="og:type" content="website">
+    <link rel="canonical" href="https://freetools.web.id/view-source">
+    <link rel="icon" type="image/x-icon" href="https://cdn.chand.web.id/icon.ico">
+    <link rel="stylesheet" href="https://cdn.chand.web.id/style.css">
+    <style>
+        .tool-page-section {
+            padding: 60px 0;
+            position: relative;
+            z-index: 1;
+        }
+        .form-card {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: left;
+            padding: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+        .form-group input[type="text"],
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background-color: var(--input-bg-color);
+            color: var(--text-color);
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .form-group select {
+            appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%23333" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 12px;
+        }
+        body.dark-mode .form-group select {
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%23e0e0e0" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+        }
+        .form-group input[type="text"]:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 0.25rem rgba(111, 66, 193, 0.25);
+        }
+        body.dark-mode .form-group input[type="text"]:focus,
+        body.dark-mode .form-group select:focus,
+        body.dark-mode .form-mode textarea:focus {
+            box-shadow: 0 0 0 0.25rem rgba(167, 139, 250, 0.25);
+        }
+        .result-area {
+            background-color: var(--input-bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 15px;
+            min-height: 100px;
+            color: var(--text-color);
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+            text-align: left;
+            overflow: auto;
+            max-height: 500px;
+        }
+        .result-area pre {
+            margin: 0;
+            padding: 0;
+        }
+        .result-area code {
+            display: block;
+        }
+        .result-area a {
+            color: var(--primary-color);
+            text-decoration: underline;
+        }
+        .result-area a:hover {
+            text-decoration: none;
+        }
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-start;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .button.primary:hover {
+            background-color: var(--button-hover-bg-primary);
+            transform: translateY(-2px);
+        }
+        .button.secondary {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+        }
+        .button.secondary:hover {
+            background-color: var(--button-hover-bg-secondary);
+            transform: translateY(-2px);
+        }
+        .loading-spinner {
+            border: 4px solid var(--border-color);
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 10px;
+            display: none;
+        }
+        .dark-mode .loading-spinner {
+            border-color: var(--border-color);
+            border-top-color: var(--primary-color);
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -2;
+            background: linear-gradient(135deg, var(--primary-color) 0%, #8a2be2 100%);
+            opacity: 0.1;
+        }
+        body.dark-mode #particles-js {
+            background: linear-gradient(135deg, var(--background-color) 0%, var(--surface-color) 100%);
+            opacity: 0.2;
+        }
+        .result-area h3 {
+            margin-top: 0;
+            color: var(--heading-color);
+            font-size: 1.5em;
+        }
+        .result-area p {
+            margin-bottom: 5px;
+            line-height: 1.5;
+        }
+        @media (max-width: 768px) {
+            .form-card {
+                padding: 25px;
+            }
+            .form-group input[type="text"],
+            .form-group select {
+                font-size: 15px;
+                padding: 10px;
+            }
+            .button {
+                font-size: 16px;
+                padding: 10px 20px;
+            }
+            .button-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+        @media (max-width: 480px) {
+            .form-card {
+                padding: 20px;
+            }
+            .form-group input[type="text"],
+            .form-group select {
+                font-size: 14px;
+                padding: 8px;
+            }
+            .button {
+                font-size: 14px;
+                padding: 8px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="/" class="logo">Freetools</a>
+            <div class="header-controls">
+                <button class="dark-mode-toggle" aria-label="Toggle dark mode">🌙</button>
+                <button class="hamburger" aria-label="Toggle navigation" aria-controls="nav-menu" aria-expanded="false">
+                    <span class="hamburger-box">
+                        <span class="hamburger-inner"></span>
+                    </span>
+                </button>
+            </div>
+            <nav class="nav-menu" id="nav-menu" role="navigation">
+                <ul>
+                    <li><a href="/" class="nav-link">Beranda</a></li>
+                    <li><a href="/qris" class="nav-link">QRIS Generator</a></li>
+                    <li><a href="/base64" class="nav-link">Base64 Tool</a></li>
+                    <li><a href="/status-checker" class="nav-link">Cek Status Website</a></li>
+                    <li><a href="/obfuscator" class="nav-link">JS Obfuscator</a></li>
+                    <li><a href="/ascii" class="nav-link">ASCII Art</a></li>
+                    <li><a href="/notepad" class="nav-link">Temporary Notepad</a></li>
+                    <li><a href="/api-testing" class="nav-link">API Testing Tool</a></li>
+                    <li><a href="/dns-lookup" class="nav-link">DNS Lookup</a></li>
+                    <li><a href="/sub-finder" class="nav-link">Subdomain Finder</a></li>
+                    <li><a href="/check-port" class="nav-link">Cek Open Port</a></li>
+                    <li><a href="/ai" class="nav-link">AI Gratis</a></li>
+                    <li><a href="/caklontong" class="nav-link">Cak Lontong</a></li>
+                    <li><a href="/imagetoascii" class="nav-link">Image To Ascii</a></li>
+                    <li><a href="/siapakahaku" class="nav-link">Siapa Kah Aku</a></li>
+                    <li><a href="/yt-downloader" class="nav-link">Youtube Downloader</a></li>
+                    <li><a href="/tt-downloader/" class="nav-link">TikTok Downloader</a></li>
+                    <li><a href="/view-source" class="nav-link">View Source</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <div id="particles-js"></div>
+        <section class="tool-page-section">
+            <div class="container">
+                <div class="form-card">
+                    <h1>View Source Website</h1>
+                    <div class="form-group">
+                        <label for="websiteUrl">Masukkan URL Website:</label>
+                        <input type="text" id="websiteUrl" placeholder="Contoh: https://www.google.com">
+                    </div>
+                    <div class="button-group">
+                        <button id="viewSourceBtn" class="button primary">Lihat Source Code <span class="loading-spinner"></span></button>
+                        <button id="copyCodeBtn" class="button secondary" style="display:none;">Salin Kode</button>
+                    </div>
+                    <div class="form-group" style="margin-top: 30px;">
+                        <label>Hasil Source Code:</label>
+                        <div id="resultArea" class="result-area">
+                            <p>Masukkan URL website di atas untuk melihat source code HTML, CSS, dan JavaScript-nya.</p>
+                            <p><strong>Catatan Penting:</strong> Alat ini menggunakan server proxy untuk mengambil source code guna menghindari masalah keamanan browser (CORS). Masalah koneksi atau URL yang tidak valid masih bisa terjadi.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© <span id="current-year"></span> ChandStore. Semua hak cipta dilindungi.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+        const darkModeToggle = document.querySelector('.dark-mode-toggle');
+        const body = document.body;
+
+        function setDarkMode(isDark) {
+            if (isDark) {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌙';
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        }
+        const savedDarkMode = localStorage.getItem('darkMode');
+        if (savedDarkMode === 'enabled') {
+            setDarkMode(true);
+        } else {
+            setDarkMode(false);
+        }
+        darkModeToggle.addEventListener('click', () => {
+            setDarkMode(!body.classList.contains('dark-mode'));
+        });
+        hamburger.addEventListener('click', () => {
+            const isExpanded = hamburger.getAttribute('aria-expanded') === 'true';
+            hamburger.setAttribute('aria-expanded', !isExpanded);
+            hamburger.classList.toggle('is-active');
+            navMenu.classList.toggle('is-active');
+            body.classList.toggle('nav-open');
+        });
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768 && navMenu.classList.contains('is-active')) {
+                    hamburger.classList.remove('is-active');
+                    hamburger.setAttribute('aria-expanded', 'false');
+                    navMenu.classList.remove('is-active');
+                    body.classList.remove('nav-open');
+                }
+            });
+        });
+        particlesJS('particles-js', {
+            'particles': {
+                'number': {
+                    'value': 80,
+                    'density': {
+                        'enable': true,
+                        'value_area': 800
+                    }
+                },
+                'color': {
+                    'value': '#ffffff'
+                },
+                'shape': {
+                    'type': 'circle',
+                    'stroke': {
+                        'width': 0,
+                        'color': '#000000'
+                    },
+                    'polygon': {
+                        'nb_sides': 5
+                    }
+                },
+                'opacity': {
+                    'value': 0.5,
+                    'random': false,
+                    'anim': {
+                        'enable': false,
+                        'speed': 1,
+                        'opacity_min': 0.1,
+                        'sync': false
+                    }
+                },
+                'size': {
+                    'value': 3,
+                    'random': true,
+                    'anim': {
+                        'enable': false,
+                        'speed': 40,
+                        'size_min': 0.1,
+                        'sync': false
+                    }
+                },
+                'line_linked': {
+                    'enable': true,
+                    'distance': 150,
+                    'color': '#ffffff',
+                    'opacity': 0.4,
+                    'width': 1
+                },
+                'move': {
+                    'enable': true,
+                    'speed': 6,
+                    'direction': 'none',
+                    'random': false,
+                    'straight': false,
+                    'out_mode': 'out',
+                    'bounce': false,
+                    'attract': {
+                        'enable': false,
+                        'rotateX': 600,
+                        'rotateY': 1200
+                    }
+                }
+            },
+            'interactivity': {
+                'detect_on': 'canvas',
+                'events': {
+                    'onhover': {
+                        'enable': true,
+                        'mode': 'repulse'
+                    },
+                    'onclick': {
+                        'enable': true,
+                        'mode': 'push'
+                    },
+                    'resize': true
+                },
+                'modes': {
+                    'grab': {
+                        'distance': 400,
+                        'line_linked': {
+                            'opacity': 1
+                        }
+                    },
+                    'bubble': {
+                        'distance': 400,
+                        'size': 40,
+                        'duration': 2,
+                        'opacity': 8,
+                        'speed': 3
+                    },
+                    'repulse': {
+                        'distance': 200,
+                        'duration': 0.4
+                    },
+                    'push': {
+                        'particles_nb': 4
+                    },
+                    'remove': {
+                        'particles_nb': 2
+                    }
+                }
+            },
+            'retina_detect': true
+        });
+        const websiteUrlInput = document.getElementById('websiteUrl');
+        const viewSourceButton = document.getElementById('viewSourceBtn');
+        const resultArea = document.getElementById('resultArea');
+        const loadingSpinner = document.querySelector('.loading-spinner');
+        const copyCodeButton = document.getElementById('copyCodeBtn');
+        let currentSourceCode = '';
+
+        function escapeHTML(str) {
+            const div = document.createElement('div');
+            div.appendChild(document.createTextNode(str));
+            return div.innerHTML;
+        }
+        viewSourceButton.addEventListener('click', async () => {
+            const url = websiteUrlInput.value.trim();
+            if (!url) {
+                resultArea.innerHTML = '<p>Silakan masukkan URL website.</p>';
+                copyCodeButton.style.display = 'none';
+                return;
+            }
+            try {
+                new URL(url);
+            } catch (e) {
+                resultArea.innerHTML = '<p>URL yang dimasukkan tidak valid.</p>';
+                copyCodeButton.style.display = 'none';
+                return;
+            }
+            resultArea.innerHTML = '';
+            loadingSpinner.style.display = 'inline-block';
+            viewSourceButton.disabled = true;
+            copyCodeButton.style.display = 'none';
+            currentSourceCode = '';
+            try {
+                const response = await fetch('/api/view-source', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ url: url })
+                });
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || `HTTP error! Status: ${response.status}`);
+                }
+                const sourceCode = await response.text();
+                currentSourceCode = sourceCode;
+                resultArea.innerHTML = `<pre><code>${escapeHTML(sourceCode)}</code></pre>`;
+                copyCodeButton.style.display = 'inline-block';
+            } catch (error) {
+                let errorMessage = `Terjadi kesalahan: ${error.message}.`;
+                resultArea.innerHTML = `<p style="color: var(--error-color);">${errorMessage}</p>`;
+                copyCodeButton.style.display = 'none';
+                currentSourceCode = '';
+            } finally {
+                loadingSpinner.style.display = 'none';
+                viewSourceButton.disabled = false;
+            }
+        });
+        copyCodeButton.addEventListener('click', () => {
+            if (currentSourceCode) {
+                navigator.clipboard.writeText(currentSourceCode).then(() => {
+                    const originalText = copyCodeButton.textContent;
+                    copyCodeButton.textContent = 'Kode Disalin!';
+                    setTimeout(() => {
+                        copyCodeButton.textContent = originalText;
+                    }, 2000);
+                }).catch(() => {
+                    alert('Gagal menyalin kode. Pastikan Anda memberikan izin salin pada browser.');
+                });
+            }
+        });
+    </script>
+    <script src="https://cdn.chand.web.id/assets/scripts/ads.js"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FP4WNMD2G9"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-FP4WNMD2G9');
+    </script>
+    <script>
+        var ahrefs_analytics_script = document.createElement('script');
+        ahrefs_analytics_script.async = true;
+        ahrefs_analytics_script.src = 'https://analytics.ahrefs.com/analytics.js';
+        ahrefs_analytics_script.setAttribute('data-key', 'csEnCRq92VrwGM0PP481yg');
+        document.getElementsByTagName('head')[0].appendChild(ahrefs_analytics_script);
+    </script>
+</body>
+</html>

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <script src="https://cdn.chand.web.id/anti_inspect.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freetools: AI Gratis - Gemini, Deepseek, Meta, BlackBox AI</title>
+    <meta name="description" content="Gunakan AI gratis seperti Gemini Pro, Deepseek 67B, Meta AI, dan BlackBox di Freetools. Tanya apa saja, dapatkan jawaban instan.">
+    <meta name="keywords" content="ai gratis, free ai, gemini pro, deepseek llm, meta ai, blackbox ai, ai tools, chatbot, ai online, alat ai, freetools, kecerdasan buatan">
+    <meta name="author" content="ChandStore">
+    <meta property="og:title" content="Freetools: AI Gratis">
+    <meta property="og:description" content="Gunakan AI gratis seperti Gemini Pro, Deepseek 67B, Meta AI, dan BlackBox di Freetools. Tanya apa saja, dapatkan jawaban instan.">
+    <meta property="og:image" content="https://freetools.web.id/icon.ico">
+    <meta property="og:url" content="https://freetools.web.id/ai">
+    <meta property="og:type" content="website">
+    <link rel="canonical" href="https://freetools.web.id/ai">
+    <link rel="icon" type="image/x-icon" href="https://cdn.chand.web.id/icon.ico">
+    <link rel="stylesheet" href="https://cdn.chand.web.id/style.css">
+    <style>
+        .tool-page-section {
+            padding: 60px 0;
+            position: relative;
+            z-index: 1;
+        }
+        .form-card {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: left;
+            padding: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background-color: var(--input-bg-color);
+            color: var(--text-color);
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%23333" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 12px;
+        }
+        body.dark-mode .form-group select {
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%23e0e0e0" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+        }
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 0.25rem rgba(111, 66, 193, 0.25);
+        }
+        body.dark-mode .form-group select:focus,
+        body.dark-mode .form-group textarea:focus {
+            box-shadow: 0 0 0 0.25rem rgba(167, 139, 250, 0.25);
+        }
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        .ai-output-area {
+            background-color: var(--input-bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 15px;
+            min-height: 100px;
+            color: var(--text-color);
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-break: break-word;
+            text-align: left;
+            overflow-x: auto;
+        }
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-start;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .button.primary:hover {
+            background-color: var(--button-hover-bg-primary);
+            transform: translateY(-2px);
+        }
+        .button.secondary {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+        }
+        .button.secondary:hover {
+            background-color: var(--button-hover-bg-secondary);
+            transform: translateY(-2px);
+        }
+        .loading-spinner {
+            border: 4px solid var(--border-color);
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 10px;
+            display: none;
+        }
+        .dark-mode .loading-spinner {
+            border-color: var(--border-color);
+            border-top-color: var(--primary-color);
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -2;
+            background: linear-gradient(135deg, var(--primary-color) 0%, #8a2be2 100%);
+            opacity: 0.1;
+        }
+        body.dark-mode #particles-js {
+            background: linear-gradient(135deg, var(--background-color) 0%, var(--surface-color) 100%);
+            opacity: 0.2;
+        }
+        @media (max-width: 768px) {
+            .form-card {
+                padding: 25px;
+            }
+            .form-group select,
+            .form-group textarea {
+                font-size: 15px;
+                padding: 10px;
+            }
+            .button {
+                font-size: 16px;
+                padding: 10px 20px;
+            }
+            .button-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+        @media (max-width: 480px) {
+            .form-card {
+                padding: 20px;
+            }
+            .form-group select,
+            .form-group textarea {
+                font-size: 14px;
+                padding: 8px;
+            }
+            .button {
+                font-size: 14px;
+                padding: 8px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="/" class="logo">Freetools</a>
+            <div class="header-controls">
+                <button class="dark-mode-toggle" aria-label="Toggle dark mode">🌙</button>
+                <button class="hamburger" aria-label="Toggle navigation" aria-controls="nav-menu" aria-expanded="false">
+                    <span class="hamburger-box">
+                        <span class="hamburger-inner"></span>
+                    </span>
+                </button>
+            </div>
+            <nav class="nav-menu" id="nav-menu" role="navigation">
+                <ul>
+                    <li><a href="/" class="nav-link">Beranda</a></li>
+                    <li><a href="/qris" class="nav-link">QRIS Generator</a></li>
+                    <li><a href="/base64" class="nav-link">Base64 Tool</a></li>
+                    <li><a href="/status-checker" class="nav-link">Cek Status Website</a></li>
+                    <li><a href="/obfuscator" class="nav-link">JS Obfuscator</a></li>
+                    <li><a href="/ascii" class="nav-link">ASCII Art</a></li>
+                    <li><a href="/notepad" class="nav-link">Temporary Notepad</a></li>
+                    <li><a href="/api-testing" class="nav-link">API Testing Tool</a></li>
+                    <li><a href="/dns-lookup" class="nav-link">DNS Lookup</a></li>
+                    <li><a href="/sub-finder" class="nav-link">Subdomain Finder</a></li>
+                    <li><a href="/check-port" class="nav-link">Cek Open Port</a></li>
+                    <li><a href="/ai" class="nav-link">AI Gratis</a></li>
+                    <li><a href="/caklontong" class="nav-link">Cak Lontong</a></li>
+                    <li><a href="/imagetoascii" class="nav-link">Image To Ascii</a></li>
+                    <li><a href="/siapakahaku" class="nav-link">Siapa Kah Aku</a></li>
+                    <li><a href="/yt-downloader" class="nav-link">Youtube Downloader</a></li>
+                    <li><a href="/tt-downloader/" class="nav-link">TikTok Downloader</a></li>
+                    <li><a href="/view-source" class="nav-link">View Source</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <div id="particles-js"></div>
+        <section class="tool-page-section">
+            <div class="container">
+                <div class="form-card">
+                    <h1>AI Gratis</h1>
+                    <div class="form-group">
+                        <label for="aiModel">Pilih Model AI:</label>
+                        <select id="aiModel">
+                            <option value="gemini-pro">Google Gemini Pro</option>
+                            <option value="deepseek-llm-67b">Deepseek LLM 67B Chat</option>
+                            <option value="meta-ai">Meta AI</option>
+                            <option value="blackbox-ai">BlackBox AI</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="aiContent">Tulis Pertanyaanmu:</label>
+                        <textarea id="aiContent" placeholder="Contoh: Jelaskan konsep kecerdasan buatan dalam 3 paragraf."></textarea>
+                    </div>
+                    <div class="button-group">
+                        <button id="sendQuery" class="button primary">Kirim Pertanyaan <span class="loading-spinner"></span></button>
+                        <button id="copyResponse" class="button secondary" style="display:none;">Salin Respons</button>
+                    </div>
+                    <div class="form-group" style="margin-top: 30px;">
+                        <label>Respons AI:</label>
+                        <div id="aiResponse" class="ai-output-area"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© <span id="current-year"></span> ChandStore. Semua hak cipta dilindungi.</p>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdn.chand.web.id/assets/scripts/ai.js"></script>
+    <script src="https://cdn.chand.web.id/assets/scripts/ads.js"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FP4WNMD2G9"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-FP4WNMD2G9');
+    </script>
+    <script>
+        var ahrefs_analytics_script = document.createElement('script');
+        ahrefs_analytics_script.async = true;
+        ahrefs_analytics_script.src = 'https://analytics.ahrefs.com/analytics.js';
+        ahrefs_analytics_script.setAttribute('data-key', 'csEnCRq92VrwGM0PP481yg');
+        document.getElementsByTagName('head')[0].appendChild(ahrefs_analytics_script);
+    </script>
+</body>
+</html>

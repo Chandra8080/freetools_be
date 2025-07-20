@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <script src="https://cdn.chand.web.id/anti_inspect.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freetools: Game Cak Lontong - Tebak Jawaban Kocak & Asah Otak!</title>
+    <meta name="description" content="Asah otak dan logika dengan Game Cak Lontong gratis dari Freetools! Tebak jawaban kocak dari soal-soal unik, dapatkan deskripsi lengkap, dan mainkan tanpa batas. Mainkan sekarang!">
+    <meta name="keywords" content="game cak lontong, cak lontong online, tebak jawaban cak lontong, asah otak, game tebak-tebakan, freetools, game gratis, kuis lucu, tebak kata, puzzle game">
+    <meta name="author" content="ChandStore">
+    <meta property="og:title" content="Freetools: Game Cak Lontong">
+    <meta property="og:description" content="Asah otak dan logika dengan Game Cak Lontong gratis dari Freetools! Tebak jawaban kocak dari soal-soal unik, dapatkan deskripsi lengkap, dan mainkan tanpa batas. Mainkan sekarang!">
+    <meta property="og:image" content="https://freetools.web.id/icon.ico">
+    <meta property="og:url" content="https://freetools.web.id/caklontong">
+    <meta property="og:type" content="website">
+    <link rel="canonical" href="https://freetools.web.id/caklontong">
+    <link rel="icon" type="image/x-icon" href="https://cdn.chand.web.id/icon.ico">
+    <link rel="stylesheet" href="https://cdn.chand.web.id/style.css">
+    <style>
+        .tool-page-section {
+            padding: 40px 0;
+            position: relative;
+            overflow: hidden;
+            isolation: isolate;
+        }
+        .tool-page-section .container {
+            position: relative;
+            z-index: 1;
+        }
+        .game-status-message {
+            margin-top: 15px;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+        .correct {
+            color: var(--accent-color);
+        }
+        .incorrect {
+            color: var(--primary-color);
+        }
+        #feedback-area p {
+            margin-bottom: 8px;
+        }
+        #correct-answer-display span {
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="/" class="logo">Freetools</a>
+            <div class="header-controls">
+                <button class="dark-mode-toggle" aria-label="Toggle dark mode">🌙</button>
+                <button class="hamburger" aria-label="Toggle navigation" aria-controls="nav-menu" aria-expanded="false">
+                    <span class="hamburger-box">
+                        <span class="hamburger-inner"></span>
+                    </span>
+                </button>
+            </div>
+            <nav class="nav-menu" id="nav-menu" role="navigation">
+                <ul>
+                    <li><a href="/" class="nav-link">Beranda</a></li>
+                    <li><a href="/qris" class="nav-link">QRIS Generator</a></li>
+                    <li><a href="/base64" class="nav-link">Base64 Tool</a></li>
+                    <li><a href="/status-checker" class="nav-link">Cek Status Website</a></li>
+                    <li><a href="/obfuscator" class="nav-link">JS Obfuscator</a></li>
+                    <li><a href="/ascii" class="nav-link">ASCII Art</a></li>
+                    <li><a href="/notepad" class="nav-link">Temporary Notepad</a></li>
+                    <li><a href="/api-testing" class="nav-link">API Testing Tool</a></li>
+                    <li><a href="/dns-lookup" class="nav-link">DNS Lookup</a></li>
+                    <li><a href="/sub-finder" class="nav-link">Subdomain Finder</a></li>
+                    <li><a href="/check-port" class="nav-link">Cek Open Port</a></li>
+                    <li><a href="/ai" class="nav-link">AI Gratis</a></li>
+                    <li><a href="/caklontong" class="nav-link">Cak Lontong</a></li>
+                    <li><a href="/imagetoascii" class="nav-link">Image To Ascii</a></li>
+                    <li><a href="/siapakahaku" class="nav-link">Siapa Kah Aku</a></li>
+                    <li><a href="/yt-downloader" class="nav-link">Youtube Downloader</a></li>
+                    <li><a href="/tt-downloader/" class="nav-link">TikTok Downloader</a></li>
+                    <li><a href="/view-source" class="nav-link">View Source</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <section class="tool-page-section">
+            <div class="container">
+                <h1>Game Cak Lontong</h1>
+                <div class="form-card">
+                    <p class="status-text" id="loading-status">Memuat soal...</p>
+                    <h2 class="hidden" id="question-title">Soal:</h2>
+                    <p id="question-text" class="hidden"></p>
+                    <div class="input-group hidden" id="answer-input-group">
+                        <label for="answer-input">Jawabanmu:</label>
+                        <input type="text" id="answer-input" placeholder="Masukkan jawabanmu..." autocomplete="off">
+                    </div>
+                    <div class="button-group">
+                        <button id="check-answer-btn" class="button primary hidden" disabled>Cek Jawaban</button>
+                        <button id="new-question-btn" class="button secondary hidden">Soal Baru</button>
+                    </div>
+                    <div id="feedback-area" class="qris-output hidden">
+                        <p id="feedback-status-message" class="game-status-message"></p>
+                        <p id="correct-answer-display" class="hidden">Jawaban Benar: <span id="correct-answer-text"></span></p>
+                        <p id="answer-description" class="hidden"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© <span id="current-year"></span> ChandStore. Semua hak cipta dilindungi.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.chand.web.id/assets/scripts/caklontong.js"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FP4WNMD2G9"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-FP4WNMD2G9');
+    </script>
+    <script>
+        var ahrefs_analytics_script = document.createElement('script');
+        ahrefs_analytics_script.async = true;
+        ahrefs_analytics_script.src = 'https://analytics.ahrefs.com/analytics.js';
+        ahrefs_analytics_script.setAttribute('data-key', 'csEnCRq92VrwGM0PP481yg');
+        document.getElementsByTagName('head')[0].appendChild(ahrefs_analytics_script);
+    </script>
+    <script sr="https://cdn.chand.web.id/assets/scripts/ads.js"></script>
+</body>
+</html>

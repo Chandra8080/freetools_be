@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <script src="https://cdn.chand.web.id/anti_inspect.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freetools: Saran Pengguna</title>
+    <meta name="description" content="Lihat saran dan kritik dari pengguna Freetools lainnya.">
+    <link rel="icon" type="image/x-icon" href="https://cdn.chand.web.id/icon.ico">
+    <link rel="stylesheet" href="https://cdn.chand.web.id/style.css">
+    <style>
+        .suggestions-list-section {
+            padding: 40px 0;
+            background-color: var(--background-secondary);
+        }
+        .suggestions-list-section h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--text-color);
+        }
+        #suggestionsContainer {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .suggestion-card {
+            background-color: var(--card-background);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .suggestion-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+        }
+        .suggestion-card h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+        .suggestion-card p {
+            color: var(--text-color);
+            line-height: 1.6;
+            flex-grow: 1;
+            margin-bottom: 15px;
+        }
+        .suggestion-card .meta {
+            font-size: 0.9rem;
+            color: var(--text-color-secondary);
+            text-align: right;
+            margin-top: 10px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 10px;
+        }
+        .loading-message, .error-message, .no-suggestions-message {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--text-color);
+            margin-top: 50px;
+            grid-column: 1 / -1;
+        }
+        .dark-mode .suggestions-list-section {
+            background-color: var(--background-secondary-dark);
+        }
+        .dark-mode .suggestions-list-section h1,
+        .dark-mode .suggestion-card h3,
+        .dark-mode .suggestion-card p,
+        .dark-mode .loading-message,
+        .dark-mode .error-message,
+        .dark-mode .no-suggestions-message {
+            color: var(--text-color-dark);
+        }
+        .dark-mode .suggestion-card {
+            background-color: var(--card-background-dark);
+            border-color: var(--border-color-dark);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .dark-mode .suggestion-card:hover {
+            box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+        }
+        .dark-mode .suggestion-card .meta {
+            color: var(--text-color-secondary-dark);
+            border-color: var(--border-color-dark);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="/" class="logo">Freetools</a>
+            <div class="header-controls">
+                <button class="dark-mode-toggle" aria-label="Toggle dark mode">🌙</button>
+                <button class="hamburger" aria-label="Toggle navigation" aria-controls="nav-menu" aria-expanded="false">
+                    <span class="hamburger-box">
+                        <span class="hamburger-inner"></span>
+                    </span>
+                </button>
+            </div>
+            <nav class="nav-menu" id="nav-menu" role="navigation">
+                <ul>
+                    <li><a href="/" class="nav-link">Beranda</a></li>
+                    <li><a href="/qris" class="nav-link">QRIS Generator</a></li>
+                    <li><a href="/base64" class="nav-link">Base64 Tool</a></li>
+                    <li><a href="/status-checker" class="nav-link">Cek Status Website</a></li>
+                    <li><a href="/obfuscator" class="nav-link">JS Obfuscator</a></li>
+                    <li><a href="/ascii" class="nav-link">ASCII Art</a></li>
+                    <li><a href="/notepad" class="nav-link">Temporary Notepad</a></li>
+                    <li><a href="/api-testing" class="nav-link">API Testing Tool</a></li>
+                    <li><a href="/dns-lookup" class="nav-link">DNS Lookup</a></li>
+                    <li><a href="/sub-finder" class="nav-link">Subdomain Finder</a></li>
+                    <li><a href="/check-port" class="nav-link">Cek Open Port</a></li>
+                    <li><a href="/ai" class="nav-link">AI Gratis</a></li>
+                    <li><a href="/caklontong" class="nav-link">Cak Lontong</a></li>
+                    <li><a href="/imagetoascii" class="nav-link">Image To Ascii</a></li>
+                    <li><a href="/siapakahaku" class="nav-link">Siapa Kah Aku</a></li>
+                    <li><a href="/yt-downloader" class="nav-link">Youtube Downloader</a></li>
+                    <li><a href="/tt-downloader/" class="nav-link">TikTok Downloader</a></li>
+                    <li><a href="/view-source" class="nav-link">View Source</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <section class="suggestions-list-section">
+            <div class="container">
+                <h1>Saran & Kritik Pengguna</h1>
+                <div id="suggestionsContainer">
+                    <p class="loading-message">Memuat saran...</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© <span id="current-year"></span> ChandStore. Semua hak cipta dilindungi.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+        const darkModeToggle = document.querySelector('.dark-mode-toggle');
+        const body = document.body;
+        function setDarkMode(isDark) {
+            if (isDark) {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌙';
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        }
+        const savedDarkMode = localStorage.getItem('darkMode');
+        if (savedDarkMode === 'enabled') {
+            setDarkMode(true);
+        } else {
+            setDarkMode(false);
+        }
+        darkModeToggle.addEventListener('click', () => {
+            setDarkMode(!body.classList.contains('dark-mode'));
+        });
+        hamburger.addEventListener('click', () => {
+            const isExpanded = hamburger.getAttribute('aria-expanded') === 'true';
+            hamburger.setAttribute('aria-expanded', !isExpanded);
+            hamburger.classList.toggle('is-active');
+            navMenu.classList.toggle('is-active');
+            body.classList.toggle('nav-open');
+        });
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768 && navMenu.classList.contains('is-active')) {
+                    hamburger.classList.remove('is-active');
+                    hamburger.setAttribute('aria-expanded', 'false');
+                    navMenu.classList.remove('is-active');
+                    body.classList.remove('nav-open');
+                }
+            });
+        });
+
+        const suggestionsContainer = document.getElementById('suggestionsContainer');
+
+        async function fetchAndDisplaySuggestions() {
+            suggestionsContainer.innerHTML = '<p class="loading-message">Memuat saran...</p>';
+            try {
+                const response = await fetch('/api/suggestions');
+                if (!response.ok) {
+                    throw new Error('Gagal memuat saran.');
+                }
+                const suggestions = await response.json();
+
+                suggestionsContainer.innerHTML = '';
+
+                if (suggestions.length === 0) {
+                    suggestionsContainer.innerHTML = '<p class="no-suggestions-message">Belum ada saran yang tersedia.</p>';
+                    return;
+                }
+
+                suggestions.forEach(suggestion => {
+                    const card = document.createElement('div');
+                    card.classList.add('suggestion-card');
+
+                    const formattedTimestamp = new Date(suggestion.timestamp).toLocaleString('id-ID', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+
+                    card.innerHTML = `
+                        <h3>${escapeHTML(suggestion.nama)}</h3>
+                        <p>${escapeHTML(suggestion.saranKritik)}</p>
+                        <div class="meta">Dikirim pada: ${formattedTimestamp}</div>
+                    `;
+                    suggestionsContainer.appendChild(card);
+                });
+            } catch (error) {
+                suggestionsContainer.innerHTML = `<p class="error-message">Terjadi kesalahan: ${escapeHTML(error.message)}</p>`;
+            }
+        }
+
+        function escapeHTML(str) {
+            const div = document.createElement('div');
+            div.appendChild(document.createTextNode(str));
+            return div.innerHTML;
+        }
+
+        fetchAndDisplaySuggestions();
+    </script>
+    <script src="https://cdn.chand.web.id/assets/scripts/ads.js"></script>
+</body>
+</html>

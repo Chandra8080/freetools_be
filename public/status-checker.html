@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <script src="https://cdn.chand.web.id/anti_inspect.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cek Status Website Online Gratis - Freetools</title>
+    <meta name="description" content="Cek apakah website favoritmu lagi online atau offline dengan mudah pakai alat cek status website gratis dari Freetools. Cepat dan akurat!">
+    <meta name="keywords" content="cek status website, website online, website offline, cek situs down, alat cek website, freetools status checker">
+    <meta name="author" content="ChandStore">
+    <link rel="canonical" href="https://freetools.web.id/status-checker">
+    <link rel="icon" type="image/x-icon" href="https://cdn.chand.web.id/icon.ico">
+    <link rel="stylesheet" href="https://cdn.chand.web.id/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="/" class="logo">Freetools</a>
+            <div class="header-controls">
+                <button class="dark-mode-toggle" aria-label="Toggle dark mode">🌙</button>
+                <button class="hamburger" aria-label="Toggle navigation" aria-controls="nav-menu" aria-expanded="false">
+                    <span class="hamburger-box">
+                        <span class="hamburger-inner"></span>
+                    </span>
+                </button>
+            </div>
+            <nav class="nav-menu" id="nav-menu" role="navigation">
+                <ul>
+                    <li><a href="/" class="nav-link">Beranda</a></li>
+                    <li><a href="/qris" class="nav-link">QRIS Generator</a></li>
+                    <li><a href="/base64" class="nav-link">Base64 Tool</a></li>
+                    <li><a href="/status-checker" class="nav-link">Cek Status Website</a></li>
+                    <li><a href="/obfuscator" class="nav-link">JS Obfuscator</a></li>
+                    <li><a href="/ascii" class="nav-link">ASCII Art</a></li>
+                    <li><a href="/notepad" class="nav-link">Temporary Notepad</a></li>
+                    <li><a href="/api-testing" class="nav-link">API Testing Tool</a></li>
+                    <li><a href="/dns-lookup" class="nav-link">DNS Lookup</a></li>
+                    <li><a href="/sub-finder" class="nav-link">Subdomain Finder</a></li>
+                    <li><a href="/check-port" class="nav-link">Cek Open Port</a></li>
+                    <li><a href="/ai" class="nav-link">AI Gratis</a></li>
+                    <li><a href="/caklontong" class="nav-link">Cak Lontong</a></li>
+                    <li><a href="/imagetoascii" class="nav-link">Image To Ascii</a></li>
+                    <li><a href="/siapakahaku" class="nav-link">Siapa Kah Aku</a></li>
+                    <li><a href="/yt-downloader" class="nav-link">Youtube Downloader</a></li>
+                    <li><a href="/tt-downloader/" class="nav-link">TikTok Downloader</a></li>
+                    <li><a href="/view-source" class="nav-link">View Source</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <section class="tool-page-section">
+            <div class="container">
+                <h1>Cek Status Website, Online atau Down?</h1>
+                <p>Mau tahu website tertentu lagi bisa diakses atau enggak? Tempel URL-nya di bawah ini, nanti langsung ketahuan statusnya!</p>
+
+                <div class="tool-card form-card">
+                    <div class="input-group">
+                        <label for="website-url">Masukkan URL Website di Sini:</label>
+                        <input type="text" id="website-url" placeholder="Contoh: https://google.com atau freetools.web.id" autocomplete="off">
+                    </div>
+                    <button id="check-status-btn" class="button primary">Langsung Cek Statusnya!</button>
+
+                    <div id="status-output" class="status-checker-output hidden">
+                         <p>Status: <strong id="status-code"></strong> (<span id="status-text"></span>)</p>
+                         <p id="status-message"></p>
+                    </div>
+                     <p id="status-checker-status" class="status-text"></p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© <span id="current-year"></span> ChandStore. Semua hak cipta dilindungi.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+        const websiteUrlInput = document.getElementById('website-url');
+        const checkStatusBtn = document.getElementById('check-status-btn');
+        const statusOutputDiv = document.getElementById('status-output');
+        const statusCodeSpan = document.getElementById('status-code');
+        const statusTextSpan = document.getElementById('status-text');
+        const statusMessageP = document.getElementById('status-message');
+        const statusCheckerStatus = document.getElementById('status-checker-status');
+
+        if (statusOutputDiv) {
+            statusOutputDiv.classList.add('hidden');
+        }
+
+        if (checkStatusBtn) {
+            checkStatusBtn.addEventListener('click', async () => {
+                const url = websiteUrlInput.value.trim();
+                if (!url) {
+                    if(statusCheckerStatus) statusCheckerStatus.textContent = 'Input URL website-nya masih kosong nih. Yuk, diisi dulu!';
+                    if(statusOutputDiv) statusOutputDiv.classList.add('hidden');
+                    return;
+                }
+                if(statusCheckerStatus) statusCheckerStatus.textContent = 'Oke, lagi proses cek status website...';
+                if(statusOutputDiv) statusOutputDiv.classList.add('hidden');
+                checkStatusBtn.disabled = true;
+                try {
+                    const response = await fetch('/api/check-website-status', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ url: url })
+                    });
+                    const data = await response.json();
+                    if(statusOutputDiv) statusOutputDiv.classList.remove('hidden');
+                    if(statusMessageP) statusMessageP.textContent = '';
+                    if (response.ok) {
+                        if(statusCodeSpan) statusCodeSpan.textContent = data.status;
+                        if(statusTextSpan) statusTextSpan.textContent = data.statusText;
+                        if(statusCheckerStatus) statusCheckerStatus.textContent = 'Pengecekan selesai!';
+                        if (data.status >= 200 && data.status < 400) {
+                            if(statusMessageP) statusMessageP.textContent = 'Website sepertinya online dan berfungsi normal. Aman!';
+                            if(statusCodeSpan) statusCodeSpan.style.color = 'var(--accent-color)';
+                        } else if (data.status >= 400 && data.status < 500) {
+                            if(statusMessageP) statusMessageP.textContent = `Website mengembalikan kode status ${data.status}, ini biasanya menandakan ada masalah di sisi klien atau URL tidak valid.`;
+                            if(statusCodeSpan) statusCodeSpan.style.color = 'var(--primary-color)';
+                        } else if (data.status >= 500) {
+                            if(statusMessageP) statusMessageP.textContent = `Website mengembalikan kode status ${data.status}, ini biasanya menandakan ada masalah di server website. Mungkin lagi down?`;
+                            if(statusCodeSpan) statusCodeSpan.style.color = 'var(--primary-color)';
+                        } else {
+                            if(statusMessageP) statusMessageP.textContent = `Website mengembalikan kode status ${data.status}. Ini mungkin bukan kode standar tapi setidaknya ada respon.`;
+                            if(statusCodeSpan) statusCodeSpan.style.color = 'var(--text-secondary)';
+                        }
+                    } else {
+                        if(statusCodeSpan) statusCodeSpan.textContent = 'Gagal';
+                        if(statusTextSpan) statusTextSpan.textContent = '';
+                        if(statusMessageP) statusMessageP.textContent = data.error || 'Hmm, terjadi kesalahan saat mengecek status. Pastikan URL-nya benar ya.';
+                        if(statusCheckerStatus) statusCheckerStatus.textContent = 'Pengecekan gagal.';
+                        if(statusCodeSpan) statusCodeSpan.style.color = '#dc3545';
+                    }
+                } catch (error) {
+                    if(statusCheckerStatus) statusCheckerStatus.textContent = 'Aduh, ada kendala koneksi ke server atau website tujuan. Coba lagi ya!';
+                    if(statusOutputDiv) statusOutputDiv.classList.add('hidden');
+                } finally {
+                    checkStatusBtn.disabled = false;
+                }
+            });
+        }
+
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+        const darkModeToggle = document.querySelector('.dark-mode-toggle');
+        const body = document.body;
+
+        function setDarkMode(isDark) {
+            if (isDark) {
+                if(body) body.classList.add('dark-mode');
+                if (darkModeToggle) darkModeToggle.textContent = '☀️';
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                if(body) body.classList.remove('dark-mode');
+                if (darkModeToggle) darkModeToggle.textContent = '🌙';
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        }
+        const savedDarkMode = localStorage.getItem('darkMode');
+        if (savedDarkMode === 'enabled') {
+            setDarkMode(true);
+        } else {
+            setDarkMode(false);
+        }
+        if (darkModeToggle) {
+            darkModeToggle.addEventListener('click', () => {
+                setDarkMode(!body.classList.contains('dark-mode'));
+            });
+        }
+        if (hamburger && navMenu) {
+            hamburger.addEventListener('click', () => {
+                const isExpanded = hamburger.getAttribute('aria-expanded') === 'true';
+                hamburger.setAttribute('aria-expanded', !isExpanded);
+                hamburger.classList.toggle('is-active');
+                navMenu.classList.toggle('is-active');
+                if(body) body.classList.toggle('nav-open');
+            });
+        }
+         document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768 && hamburger && navMenu) {
+                    hamburger.classList.remove('is-active');
+                    hamburger.setAttribute('aria-expanded', 'false');
+                    navMenu.classList.remove('is-active');
+                    if(body) body.classList.remove('nav-open');
+                }
+            });
+        });
+    </script>
+    <script src="https://cdn.chand.web.id/assets/scripts/ads.js"></script>
+</body>
+</html>

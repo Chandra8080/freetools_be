@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <script src="https://cdn.chand.web.id/anti_inspect.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temporary Notepad - Freetools</title>
+    <meta name="description" content="Buat dan bagikan catatan sementara dengan link unik. Tambahkan password untuk privasi. Alat notepad online gratis dari Freetools.">
+    <meta name="keywords" content="temporary notepad, notepad online, share catatan, catatan sementara, password catatan, online tool, free notepad, freetools">
+    <meta name="author" content="ChandStore">
+    <meta property="og:title" content="Temporary Notepad - Freetools">
+    <meta property="og:description" content="Butuh tempat mencatat cepat yang bisa langsung dishare? Buat temporary note dengan link unik, bisa diproteksi password. Gratis di Freetools!">
+    <meta property="og:image" content="https://freetools.web.id/icon.ico">
+    <meta property="og:url" content="https://freetools.web.id/notepad">
+    <meta property="og:type" content="website">
+    <link rel="canonical" href="https://freetools.web.id/notepad">
+    <link rel="icon" type="image/x-icon" href="https://cdn.chand.web.id/icon.ico">
+    <link rel="stylesheet" href="https://cdn.chand.web.id/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -2;
+        }
+        .tool-page-section {
+             position: relative;
+             overflow: hidden;
+        }
+         .tool-page-section::before {
+             content: '';
+             position: absolute;
+             top: 0;
+             left: 0;
+             right: 0;
+             bottom: 0;
+             background: rgba(0,0,0,0.15);
+             z-index: -1;
+         }
+        .tool-page-section .container {
+            position: relative;
+            z-index: 1;
+        }
+        .note-output-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .note-output-group input[type="text"] {
+            flex-grow: 1;
+            min-width: 0;
+            background-color: var(--input-bg-color);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            border-radius: 4px;
+        }
+         .note-view pre {
+            background-color: var(--input-bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 15px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.9em;
+            max-height: 300px;
+            overflow-y: auto;
+            color: var(--text-color);
+            text-align: left;
+            font-family: monospace, 'Courier New', Courier;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="/" class="logo">Freetools</a>
+            <div class="header-controls">
+                <button class="dark-mode-toggle" aria-label="Toggle dark mode">🌙</button>
+                <button class="hamburger" aria-label="Toggle navigation" aria-controls="nav-menu" aria-expanded="false">
+                    <span class="hamburger-box">
+                        <span class="hamburger-inner"></span>
+                    </span>
+                </button>
+            </div>
+            <nav class="nav-menu" id="nav-menu" role="navigation">
+                <ul>
+                    <li><a href="/" class="nav-link">Beranda</a></li>
+                    <li><a href="/qris" class="nav-link">QRIS Generator</a></li>
+                    <li><a href="/base64" class="nav-link">Base64 Tool</a></li>
+                    <li><a href="/status-checker" class="nav-link">Cek Status Website</a></li>
+                    <li><a href="/obfuscator" class="nav-link">JS Obfuscator</a></li>
+                    <li><a href="/ascii" class="nav-link">ASCII Art</a></li>
+                    <li><a href="/notepad" class="nav-link">Temporary Notepad</a></li>
+                    <li><a href="/api-testing" class="nav-link">API Testing Tool</a></li>
+                    <li><a href="/dns-lookup" class="nav-link">DNS Lookup</a></li>
+                    <li><a href="/sub-finder" class="nav-link">Subdomain Finder</a></li>
+                    <li><a href="/check-port" class="nav-link">Cek Open Port</a></li>
+                    <li><a href="/ai" class="nav-link">AI Gratis</a></li>
+                    <li><a href="/caklontong" class="nav-link">Cak Lontong</a></li>
+                    <li><a href="/imagetoascii" class="nav-link">Image To Ascii</a></li>
+                    <li><a href="/siapakahaku" class="nav-link">Siapa Kah Aku</a></li>
+                    <li><a href="/yt-downloader" class="nav-link">Youtube Downloader</a></li>
+                    <li><a href="/tt-downloader/" class="nav-link">TikTok Downloader</a></li>
+                    <li><a href="/view-source" class="nav-link">View Source</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <section class="tool-page-section">
+            <div id="particles-js"></div>
+            <div class="container">
+                <h1 id="page-title">Temporary Notepad</h1>
+                <div class="form-card">
+                    <div id="create-note-area">
+                        <p>Buat catatan sementara, bisa di-share pakai link unik. Bisa juga diproteksi password!</p>
+                        <div class="input-group">
+                            <label for="noteTitle">Judul Catatan (Opsional):</label>
+                            <input type="text" id="noteTitle" placeholder="Masukkan judul catatan...">
+                        </div>
+                        <div class="input-group">
+                            <label for="noteContent">Isi Catatan:</label>
+                            <textarea id="noteContent" placeholder="Tulis catatan Anda di sini..."></textarea>
+                        </div>
+                        <div class="input-group">
+                            <label for="notePassword">Password (Opsional):</label>
+                            <div class="password-input-wrapper">
+                                <input type="password" id="notePassword" placeholder="Masukkan password (jika perlu)">
+                                <button type="button" class="password-toggle" data-target="notePassword">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="input-group" id="captcha-group">
+                            <label for="captchaInput" id="captchaQuestion"></label>
+                            <input type="text" id="captchaInput" placeholder="Jawaban Anda">
+                        </div>
+                        <button id="createNoteBtn" class="button primary">Buat Catatan</button>
+                        <div id="create-output" class="note-output hidden">
+                            <h4>Catatan Berhasil Dibuat!</h4>
+                            <p>Link Berbagi:</p>
+                            <div class="note-output-group">
+                                <input type="text" id="shareUrlOutput" readonly>
+                                <button id="copyShareUrlBtn" class="button secondary">Copy Link</button>
+                            </div>
+                             <p class="status-text" style="color: var(--accent-color);">Catatan ini bersifat sementara. Jangan gunakan untuk informasi sangat rahasia.</p>
+                        </div>
+                    </div>
+                    <div id="view-note-area" class="hidden">
+                         <h2 id="view-note-title" class="note-title">Loading...</h2>
+                        <div id="password-prompt" class="hidden">
+                             <p>Catatan ini diproteksi password. Mohon masukkan password untuk melihat.</p>
+                            <div class="input-group">
+                                <label for="viewNotePassword">Password:</label>
+                                <div class="password-input-wrapper">
+                                    <input type="password" id="viewNotePassword" placeholder="Masukkan password">
+                                    <button type="button" class="password-toggle" data-target="viewNotePassword">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <button id="viewNoteBtn" class="button primary">Lihat Catatan</button>
+                        </div>
+                        <div id="note-content-display" class="note-view hidden">
+                            <h4>Isi Catatan:</h4>
+                            <pre id="viewNoteContent"></pre>
+                            <button id="copyNoteContentBtn" class="button secondary">Copy Isi Catatan</button>
+                        </div>
+                         <p class="status-text" style="color: var(--text-secondary);"><a href="/notepad">Buat Catatan Baru</a></p>
+                    </div>
+                    <p id="errorMsg" class="status-text" style="color: var(--primary-color);"></p>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <div class="container">
+            <p>© <span id="current-year"></span> ChandStore. Semua hak cipta dilindungi.</p>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        particlesJS('particles-js', {
+            "particles": {
+                "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": "#ffffff" },
+                "shape": { "type": "circle", "stroke": { "width": 0, "color": "#000000" }, "polygon": { "nb_sides": 5 } },
+                "opacity": { "value": 0.5, "random": false, "anim": { "enable": false, "speed": 1, "opacity_min": 0.1, "sync": false } },
+                "size": { "value": 3, "random": true, "anim": { "enable": false, "speed": 40, "size_min": 0.1, "sync": false } },
+                "line_linked": { "enable": true, "distance": 150, "color": "#ffffff", "opacity": 0.4, "width": 1 },
+                "move": { "enable": true, "speed": 6, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false, "attract": { "enable": false, "rotateX": 600, "rotateY": 1200 } }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": { "onhover": { "enable": true, "mode": "repulse" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
+                "modes": {
+                    "grab": { "distance": 400, "line_linked": { "opacity": 1 } },
+                    "bubble": { "distance": 400, "size": 40, "duration": 2, "opacity": 8, "speed": 3 },
+                    "repulse": { "distance": 200, "duration": 0.4 },
+                    "push": { "particles_nb": 4 },
+                    "remove": { "particles_nb": 2 }
+                }
+            },
+            "retina_detect": true
+        });
+    </script>
+    <script src="https://cdn.chand.web.id/assets/scripts/notepad.js"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FP4WNMD2G9"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-FP4WNMD2G9');
+    </script>
+    <script>
+        var ahrefs_analytics_script = document.createElement('script');
+        ahrefs_analytics_script.async = true;
+        ahrefs_analytics_script.src = 'https://analytics.ahrefs.com/analytics.js';
+        ahrefs_analytics_script.setAttribute('data-key', 'csEnCRq92VrwGM0PP481yg');
+        document.getElementsByTagName('head')[0].appendChild(ahrefs_analytics_script);
+    </script>
+    <script src="https://cdn.chand.web.id/assets/scripts/ads.js"></script>
+</body>
+</html>

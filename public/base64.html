@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <script src="https://cdn.chand.web.id/anti_inspect.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encode & Decode Base64 Online Gratis - Freetools</title>
+    <meta name="description" content="Alat gratis untuk encode teks ke Base64 atau decode Base64 kembali ke teks di Freetools. Cepat dan mudah digunakan.">
+    <meta name="keywords" content="base64 encode, base64 decode, encode text, decode base64, alat base64 online, freetools base64">
+    <meta name="author" content="ChandStore">
+    <link rel="canonical" href="https://freetools.web.id/base64">
+    <link rel="icon" type="image/x-icon" href="https://cdn.chand.web.id/icon.ico">
+    <link rel="stylesheet" href="https://cdn.chand.web.id/style.css">
+    <script src="https://staupsoaksy.net/act/files/tag.min.js?z=9296043" data-cfasync="false" async></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="/" class="logo">Freetools</a>
+            <div class="header-controls">
+                <button class="dark-mode-toggle" aria-label="Toggle dark mode">🌙</button>
+                <button class="hamburger" aria-label="Toggle navigation" aria-controls="nav-menu" aria-expanded="false">
+                    <span class="hamburger-box">
+                        <span class="hamburger-inner"></span>
+                    </span>
+                </button>
+            </div>
+            <nav class="nav-menu" id="nav-menu" role="navigation">
+                <ul>
+                    <li><a href="/" class="nav-link">Beranda</a></li>
+                    <li><a href="/qris" class="nav-link">QRIS Generator</a></li>
+                    <li><a href="/base64" class="nav-link">Base64 Tool</a></li>
+                    <li><a href="/status-checker" class="nav-link">Cek Status Website</a></li>
+                    <li><a href="/obfuscator" class="nav-link">JS Obfuscator</a></li>
+                    <li><a href="/ascii" class="nav-link">ASCII Art</a></li>
+                    <li><a href="/notepad" class="nav-link">Temporary Notepad</a></li>
+                    <li><a href="/api-testing" class="nav-link">API Testing Tool</a></li>
+                    <li><a href="/dns-lookup" class="nav-link">DNS Lookup</a></li>
+                    <li><a href="/sub-finder" class="nav-link">Subdomain Finder</a></li>
+                    <li><a href="/check-port" class="nav-link">Cek Open Port</a></li>
+                    <li><a href="/ai" class="nav-link">AI Gratis</a></li>
+                    <li><a href="/caklontong" class="nav-link">Cak Lontong</a></li>
+                    <li><a href="/imagetoascii" class="nav-link">Image To Ascii</a></li>
+                    <li><a href="/siapakahaku" class="nav-link">Siapa Kah Aku</a></li>
+                    <li><a href="/yt-downloader" class="nav-link">Youtube Downloader</a></li>
+                    <li><a href="/tt-downloader/" class="nav-link">TikTok Downloader</a></li>
+                    <li><a href="/view-source" class="nav-link">View Source</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <section class="tool-page-section">
+            <div class="container">
+                <h1>Encode & Decode Teks atau Kode Base64 Gampang!</h1>
+                <p>Punya teks rahasia atau kode Base64 yang butuh diubah? Tempel aja di sini, pilih mau di-encode atau decode, beres dalam sekejap!</p>
+
+                <div class="tool-card form-card">
+                    <div class="input-group">
+                        <label for="base64-input">Masukkan Teks atau Kode Base64 Di Sini:</label>
+                        <textarea id="base64-input" placeholder="Masukkan teks yang ingin di-encode atau kode Base64 yang ingin di-decode..."></textarea>
+                    </div>
+
+                    <div class="button-group">
+                        <button id="encode-btn" class="button primary">Encode ke Base64</button>
+                        <button id="decode-btn" class="button secondary">Decode dari Base64</button>
+                    </div>
+
+                    <div id="base64-output" class="base64-output hidden">
+                        <label for="base64-result">Hasilnya Ada Di Sini:</label>
+                         <div class="base64-input-group">
+                            <textarea id="base64-result" readonly placeholder="Hasil akan muncul di sini..."></textarea>
+                            <button id="copy-base64-btn" class="button secondary">Salin Hasil</button>
+                         </div>
+                         <p id="base64-status" class="status-text"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© <span id="current-year"></span> ChandStore. Semua hak cipta dilindungi.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+        const base64Input = document.getElementById('base64-input');
+        const encodeBtn = document.getElementById('encode-btn');
+        const decodeBtn = document.getElementById('decode-btn');
+        const base64OutputDiv = document.getElementById('base64-output');
+        const base64ResultInput = document.getElementById('base64-result');
+        const copyBase64Btn = document.getElementById('copy-base64-btn');
+        const base64Status = document.getElementById('base64-status');
+
+        if (base64OutputDiv) {
+            base64OutputDiv.classList.add('hidden');
+        }
+
+        if (encodeBtn) {
+            encodeBtn.addEventListener('click', async () => {
+                const text = base64Input.value.trim();
+                if (!text) {
+                    base64Status.textContent = 'Ups, teks untuk di-encode masih kosong nih. Isi dulu ya!';
+                    base64OutputDiv.classList.add('hidden');
+                    return;
+                }
+                base64Status.textContent = 'Oke, lagi proses meng-encode...';
+                base64OutputDiv.classList.add('hidden');
+                encodeBtn.disabled = true;
+                decodeBtn.disabled = true;
+                try {
+                    const response = await fetch('/api/encode-base64', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ text: text })
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        base64ResultInput.value = data.encodedText;
+                        base64OutputDiv.classList.remove('hidden');
+                        base64Status.textContent = 'Berhasil! Teks sudah di-encode ke Base64.';
+                    } else {
+                        base64Status.textContent = data.error || 'Yah, gagal meng-encode nih. Coba cek lagi teksnya.';
+                        base64OutputDiv.classList.add('hidden');
+                    }
+                } catch (error) {
+                    base64Status.textContent = 'Aduh, ada masalah saat koneksi ke server. Coba lagi ya!';
+                    base64OutputDiv.classList.add('hidden');
+                } finally {
+                    encodeBtn.disabled = false;
+                    decodeBtn.disabled = false;
+                }
+            });
+        }
+
+        if (decodeBtn) {
+            decodeBtn.addEventListener('click', async () => {
+                const base64Text = base64Input.value.trim();
+                if (!base64Text) {
+                    base64Status.textContent = 'Kode Base64 untuk di-decode masih kosong nih. Tempel dulu ya!';
+                    base64OutputDiv.classList.add('hidden');
+                    return;
+                }
+                base64Status.textContent = 'Oke, lagi proses men-decode...';
+                base64OutputDiv.classList.add('hidden');
+                encodeBtn.disabled = true;
+                decodeBtn.disabled = true;
+                try {
+                    const response = await fetch('/api/decode-base64', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ text: base64Text })
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        base64ResultInput.value = data.decodedText;
+                        base64OutputDiv.classList.remove('hidden');
+                        base64Status.textContent = 'Sip! Kode Base64 berhasil di-decode.';
+                    } else {
+                        base64Status.textContent = data.error || 'Yah, gagal men-decode nih. Pastikan itu format Base64 yang valid.';
+                        base64OutputDiv.classList.add('hidden');
+                    }
+                } catch (error) {
+                    base64Status.textContent = 'Aduh, ada masalah saat koneksi ke server. Coba lagi ya!';
+                    base64OutputDiv.classList.add('hidden');
+                } finally {
+                    encodeBtn.disabled = false;
+                    decodeBtn.disabled = false;
+                }
+            });
+        }
+
+        if (copyBase64Btn) {
+            copyBase64Btn.addEventListener('click', async () => {
+                const textToCopy = base64ResultInput.value;
+                if (!textToCopy) return;
+                try {
+                    await navigator.clipboard.writeText(textToCopy);
+                    base64Status.textContent = 'Mantap! Hasilnya berhasil disalin!';
+                } catch (err) {
+                    base64Status.textContent = 'Yah, gagal salin otomatis. Salin manual ya!';
+                    base64ResultInput.select();
+                    base64ResultInput.setSelectionRange(0, 99999);
+                }
+            });
+        }
+
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+        const darkModeToggle = document.querySelector('.dark-mode-toggle');
+        const body = document.body;
+
+        function setDarkMode(isDark) {
+            if (isDark) {
+                body.classList.add('dark-mode');
+                if (darkModeToggle) darkModeToggle.textContent = '☀️';
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                body.classList.remove('dark-mode');
+                if (darkModeToggle) darkModeToggle.textContent = '🌙';
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        }
+        const savedDarkMode = localStorage.getItem('darkMode');
+        if (savedDarkMode === 'enabled') {
+            setDarkMode(true);
+        } else {
+            setDarkMode(false);
+        }
+        if (darkModeToggle) {
+            darkModeToggle.addEventListener('click', () => {
+                setDarkMode(!body.classList.contains('dark-mode'));
+            });
+        }
+        if (hamburger && navMenu) {
+            hamburger.addEventListener('click', () => {
+                const isExpanded = hamburger.getAttribute('aria-expanded') === 'true';
+                hamburger.setAttribute('aria-expanded', !isExpanded);
+                hamburger.classList.toggle('is-active');
+                navMenu.classList.toggle('is-active');
+                body.classList.toggle('nav-open');
+            });
+        }
+         document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768 && hamburger && navMenu) {
+                    hamburger.classList.remove('is-active');
+                    hamburger.setAttribute('aria-expanded', 'false');
+                    navMenu.classList.remove('is-active');
+                    body.classList.remove('nav-open');
+                }
+            });
+        });
+    </script>
+    <script src="https://cdn.chand.web.id/assets/scripts/ads.js"></script>
+</body>
+</html>

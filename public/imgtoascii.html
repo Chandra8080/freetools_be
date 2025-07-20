@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <script src="https://cdn.chand.web.id/anti_inspect.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Freetools: Image to ASCII Art - Konversi Gambar ke Teks!</title>
+    <meta name="description" content="Konversi gambar favoritmu menjadi karya seni teks (ASCII Art) yang unik dan dapat disalin dengan mudah di Freetools. Atur resolusi dan kepadatan karakter untuk hasil optimal!" />
+    <meta name="keywords" content="image to ascii, gambar jadi ascii, convert gambar ke teks, ascii art dari gambar, freetools, tools online gratis, alat online, digital tools, generator ascii, seni teks gambar" />
+    <meta name="author" content="ChandStore" />
+    <meta property="og:title" content="Freetools: Image to ASCII Art Online Gratis" />
+    <meta property="og:description" content="Konversi gambar ke ASCII Art dengan cepat dan mudah. Pilih gambar, atur resolusi, dan dapatkan seni teks siap pakai di Freetools." />
+    <meta property="og:image" content="https://freetools.web.id/icon.ico" />
+    <meta property="og:url" content="https://freetools.web.id/imgtoascii.html" />
+    <meta property="og:type" content="website" />
+    <link rel="canonical" href="https://freetools.web.id/imgtoascii.html" />
+    <link rel="icon" type="image/x-icon" href="https://cdn.chand.web.id/icon.ico">
+    <link rel="stylesheet" href="https://cdn.chand.web.id/style.css">
+    <style>
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0; left: 0;
+            z-index: -2;
+        }
+        .hero {
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top:0; left:0; right:0; bottom:0;
+            background: rgba(0,0,0,0.15);
+            z-index: -1;
+        }
+        .hero .container {
+            position: relative;
+            z-index: 1;
+        }
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        .file-input-wrapper input[type="file"] {
+            position: absolute;
+            left: 0; top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        .file-input-wrapper .button {
+            display: block;
+            width: 100%;
+            text-align: center;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 5px;
+            user-select: none;
+        }
+        .file-input-wrapper .button:hover {
+            background-color: #286090;
+        }
+        .loading-spinner {
+            border: 4px solid rgba(0,0,0,0.1);
+            border-left-color: var(--primary-color);
+            border-radius: 50%;
+            width: 30px; height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+            display: none;
+        }
+        .dark-mode .loading-spinner {
+            border-color: rgba(255,255,255,0.1);
+            border-left-color: var(--primary-color);
+        }
+        @keyframes spin {
+            0% {transform: rotate(0deg);}
+            100% {transform: rotate(360deg);}
+        }
+        .output-container {
+            margin-top: 20px;
+        }
+        .output-container textarea {
+            font-family: monospace, 'Courier New', Courier;
+            white-space: pre;
+            overflow-x: auto;
+            min-height: 250px;
+            width: 100%;
+            resize: vertical;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+        #imageCanvas {
+            display: none;
+        }
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            background: var(--border-color);
+            outline: none;
+            opacity: 0.7;
+            transition: opacity .2s;
+            border-radius: 5px;
+        }
+        input[type="range"]:hover {
+            opacity: 1;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px; height: 20px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+        }
+        input[type="range"]::-moz-range-thumb {
+            width: 20px; height: 20px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+        }
+        .button-group {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        .button {
+            padding: 10px 15px;
+            border: none;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            user-select: none;
+            flex: 1;
+        }
+        .button.secondary {
+            background-color: #6c757d;
+        }
+        .button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="/" class="logo">Freetools</a>
+            <div class="header-controls">
+                <button class="dark-mode-toggle" aria-label="Toggle dark mode">🌙</button>
+                <button class="hamburger" aria-label="Toggle navigation" aria-controls="nav-menu" aria-expanded="false">
+                    <span class="hamburger-box">
+                        <span class="hamburger-inner"></span>
+                    </span>
+                </button>
+            </div>
+            <nav class="nav-menu" id="nav-menu" role="navigation">
+                <ul>
+                    <li><a href="/" class="nav-link">Beranda</a></li>
+                    <li><a href="/qris" class="nav-link">QRIS Generator</a></li>
+                    <li><a href="/base64" class="nav-link">Base64 Tool</a></li>
+                    <li><a href="/status-checker" class="nav-link">Cek Status Website</a></li>
+                    <li><a href="/obfuscator" class="nav-link">JS Obfuscator</a></li>
+                    <li><a href="/ascii" class="nav-link">ASCII Art</a></li>
+                    <li><a href="/notepad" class="nav-link">Temporary Notepad</a></li>
+                    <li><a href="/api-testing" class="nav-link">API Testing Tool</a></li>
+                    <li><a href="/dns-lookup" class="nav-link">DNS Lookup</a></li>
+                    <li><a href="/sub-finder" class="nav-link">Subdomain Finder</a></li>
+                    <li><a href="/check-port" class="nav-link">Cek Open Port</a></li>
+                    <li><a href="/ai" class="nav-link">AI Gratis</a></li>
+                    <li><a href="/caklontong" class="nav-link">Cak Lontong</a></li>
+                    <li><a href="/imagetoascii" class="nav-link">Image To Ascii</a></li>
+                    <li><a href="/siapakahaku" class="nav-link">Siapa Kah Aku</a></li>
+                    <li><a href="/yt-downloader" class="nav-link">Youtube Downloader</a></li>
+                    <li><a href="/tt-downloader/" class="nav-link">TikTok Downloader</a></li>
+                    <li><a href="/view-source" class="nav-link">View Source</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <section class="tool-page-section">
+            <div id="particles-js"></div>
+            <div class="container">
+                <h1>Image to ASCII Art Converter</h1>
+                <div class="form-card">
+                    <p>Ubah gambar favoritmu menjadi teks ASCII yang unik dan menarik. Pilih gambar, atur resolusi, dan salin hasil seninya!</p>
+                    <div class="input-group">
+                        <label for="imageUpload">Pilih Gambar:</label>
+                        <div class="file-input-wrapper">
+                            <button type="button" class="button">Pilih Gambar</button>
+                            <input type="file" id="imageUpload" accept="image/*" aria-label="Pilih gambar untuk dikonversi ke ASCII Art" />
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="resolution">Resolusi Karakter: <span id="resolutionValue">8</span></label>
+                        <input type="range" id="resolution" min="2" max="20" value="8" />
+                    </div>
+
+                    <div class="loading-spinner" id="loadingSpinner" role="status" aria-live="polite" aria-label="Memproses gambar"></div>
+
+                    <div class="output-container">
+                        <label for="asciiOutput">ASCII Art:</label>
+                        <textarea id="asciiOutput" readonly aria-live="polite" aria-label="Hasil ASCII Art"></textarea>
+                    </div>
+
+                    <div class="button-group">
+                        <button id="copyAsciiBtn" class="button" disabled>Salin ASCII</button>
+                        <button id="clearAsciiBtn" class="button secondary" disabled>Bersihkan</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <canvas id="imageCanvas"></canvas>
+
+    <footer>
+        <div class="container">
+            <p>© <span id="current-year"></span> ChandStore. Semua hak cipta dilindungi.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        window.addEventListener('keydown', function (e) {
+            if (
+                e.key === 'F12' ||
+                (e.ctrlKey && e.shiftKey && ['I', 'J', 'C'].includes(e.key.toUpperCase())) ||
+                (e.ctrlKey && e.key.toUpperCase() === 'U')
+            ) {
+                e.preventDefault();
+            }
+        });
+        window.addEventListener('contextmenu', e => e.preventDefault());
+
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+        const darkModeToggle = document.querySelector('.dark-mode-toggle');
+        const body = document.body;
+
+        function setDarkMode(isDark) {
+            if (isDark) {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌙';
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        }
+
+        const savedDarkMode = localStorage.getItem('darkMode');
+        if (savedDarkMode === 'enabled') {
+            setDarkMode(true);
+        } else {
+            setDarkMode(false);
+        }
+
+        darkModeToggle.addEventListener('click', () => {
+            setDarkMode(!body.classList.contains('dark-mode'));
+        });
+
+        hamburger.addEventListener('click', () => {
+            const isExpanded = hamburger.getAttribute('aria-expanded') === 'true';
+            hamburger.setAttribute('aria-expanded', !isExpanded);
+            hamburger.classList.toggle('is-active');
+            navMenu.classList.toggle('is-active');
+            body.classList.toggle('nav-open');
+        });
+
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768 && navMenu.classList.contains('is-active')) {
+                    hamburger.classList.remove('is-active');
+                    hamburger.setAttribute('aria-expanded', 'false');
+                    navMenu.classList.remove('is-active');
+                    body.classList.remove('nav-open');
+                }
+            });
+        });
+
+        particlesJS('particles-js', {
+            "particles": {
+                "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": "#ffffff" },
+                "shape": { "type": "circle", "stroke": { "width": 0, "color": "#000000" }, "polygon": { "nb_sides": 5 } },
+                "opacity": { "value": 0.5, "random": false, "anim": { "enable": false, "speed": 1, "opacity_min": 0.1, "sync": false } },
+                "size": { "value": 3, "random": true, "anim": { "enable": false, "speed": 40, "size_min": 0.1, "sync": false } },
+                "line_linked": { "enable": true, "distance": 150, "color": "#ffffff", "opacity": 0.4, "width": 1 },
+                "move": { "enable": true, "speed": 6, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false, "attract": { "enable": false, "rotateX": 600, "rotateY": 1200 } }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": { "onhover": { "enable": true, "mode": "repulse" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
+                "modes": {
+                    "grab": { "distance": 400, "line_linked": { "opacity": 1 } },
+                    "bubble": { "distance": 400, "size": 40, "duration": 2, "opacity": 8, "speed": 3 },
+                    "repulse": { "distance": 200, "duration": 0.4 },
+                    "push": { "particles_nb": 4 },
+                    "remove": { "particles_nb": 2 }
+                }
+            },
+            "retina_detect": true
+        });
+
+        const imageUpload = document.getElementById('imageUpload');
+        const resolutionSlider = document.getElementById('resolution');
+        const resolutionValue = document.getElementById('resolutionValue');
+        const asciiOutput = document.getElementById('asciiOutput');
+        const copyAsciiBtn = document.getElementById('copyAsciiBtn');
+        const clearAsciiBtn = document.getElementById('clearAsciiBtn');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const imageCanvas = document.getElementById('imageCanvas');
+        const ctx = imageCanvas.getContext('2d');
+
+        let currentImage = null;
+        const asciiCharacters = '@#8&Oo:*. ';
+
+        function getGrayscale(r, g, b) {
+            return 0.2989 * r + 0.5870 * g + 0.1140 * b;
+        }
+
+        function convertToAscii() {
+            if (!currentImage) {
+                asciiOutput.value = 'Silakan pilih gambar terlebih dahulu.';
+                copyAsciiBtn.disabled = true;
+                clearAsciiBtn.disabled = true;
+                loadingSpinner.style.display = 'none';
+                return;
+            }
+
+            loadingSpinner.style.display = 'block';
+            asciiOutput.value = 'Memproses gambar...';
+            copyAsciiBtn.disabled = true;
+            clearAsciiBtn.disabled = true;
+
+            setTimeout(() => {
+                const resolution = parseInt(resolutionSlider.value);
+                resolutionValue.textContent = resolution;
+                const charWidth = resolution;
+                const charHeight = resolution * 2;
+
+                const originalWidth = currentImage.width;
+                const originalHeight = currentImage.height;
+
+                const maxWidth = 300;
+                const maxHeight = 300;
+
+                let scale = 1;
+                if (originalWidth > maxWidth) {
+                    scale = maxWidth / originalWidth;
+                }
+                if (originalHeight * scale > maxHeight) {
+                    scale = maxHeight / originalHeight;
+                }
+
+                const scaledWidth = Math.floor(originalWidth * scale);
+                const scaledHeight = Math.floor(originalHeight * scale);
+
+                imageCanvas.width = scaledWidth;
+                imageCanvas.height = scaledHeight;
+                ctx.clearRect(0, 0, scaledWidth, scaledHeight);
+                ctx.drawImage(currentImage, 0, 0, scaledWidth, scaledHeight);
+
+                let asciiArt = '';
+                const imageData = ctx.getImageData(0, 0, scaledWidth, scaledHeight);
+                const data = imageData.data;
+
+                for (let y = 0; y < scaledHeight; y += charHeight) {
+                    for (let x = 0; x < scaledWidth; x += charWidth) {
+                        let totalGray = 0;
+                        let count = 0;
+
+                        for (let dy = 0; dy < charHeight; dy++) {
+                            for (let dx = 0; dx < charWidth; dx++) {
+                                const px = x + dx;
+                                const py = y + dy;
+
+                                if (px < scaledWidth && py < scaledHeight) {
+                                    const idx = (py * scaledWidth + px) * 4;
+                                    const r = data[idx];
+                                    const g = data[idx + 1];
+                                    const b = data[idx + 2];
+                                    const gray = getGrayscale(r, g, b);
+                                    totalGray += gray;
+                                    count++;
+                                }
+                            }
+                        }
+
+                        const avgGray = totalGray / count;
+                        const charIndex = Math.floor((avgGray / 255) * (asciiCharacters.length - 1));
+                        asciiArt += asciiCharacters.charAt(charIndex);
+                    }
+                    asciiArt += '\n';
+                }
+
+                asciiOutput.value = asciiArt;
+                loadingSpinner.style.display = 'none';
+                copyAsciiBtn.disabled = false;
+                clearAsciiBtn.disabled = false;
+            }, 100);
+        }
+
+        imageUpload.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    currentImage = img;
+                    convertToAscii();
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        resolutionSlider.addEventListener('input', () => {
+            resolutionValue.textContent = resolutionSlider.value;
+            if (currentImage) {
+                convertToAscii();
+            }
+        });
+
+        copyAsciiBtn.addEventListener('click', () => {
+            asciiOutput.select();
+            asciiOutput.setSelectionRange(0, 99999);
+            try {
+                document.execCommand('copy');
+                alert('ASCII Art berhasil disalin!');
+            } catch (err) {
+                alert('Gagal menyalin ASCII Art.');
+            }
+        });
+
+        clearAsciiBtn.addEventListener('click', () => {
+            asciiOutput.value = '';
+            imageUpload.value = '';
+            currentImage = null;
+            copyAsciiBtn.disabled = true;
+            clearAsciiBtn.disabled = true;
+        });
+    </script>
+    <script src="https://cdn.chand.web.id/assets/scripts/ads.js"></script>
+</body>
+</html>

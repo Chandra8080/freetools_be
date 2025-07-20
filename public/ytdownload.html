@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freetools: YouTube Downloader MP3 & MP4</title>
+    <meta name="description" content="Unduh video YouTube favorit Anda dalam format MP3 (audio) atau MP4 (video) secara gratis dengan Freetools YouTube Downloader. Cepat, mudah, dan gratis.">
+    <meta name="keywords" content="youtube downloader, unduh youtube, download youtube mp3, download youtube mp4, youtube converter, free youtube downloader, alat youtube, freetools, unduh video, unduh musik">
+    <meta name="author" content="ChandStore">
+    <meta property="og:title" content="Freetools: YouTube Downloader MP3 & MP4">
+    <meta property="og:description" content="Unduh video YouTube favorit Anda dalam format MP3 (audio) atau MP4 (video) secara gratis dengan Freetools YouTube Downloader. Cepat, mudah, dan gratis.">
+    <meta property="og:image" content="https://freetools.web.id/icon.ico">
+    <meta property="og:url" content="https://freetools.web.id/ytdownload">
+    <meta property="og:type" content="website">
+    <link rel="canonical" href="https://freetools.web.id/ytdownload">
+    <link rel="icon" type="image/x-icon" href="https://cdn.chand.web.id/icon.ico">
+    <link rel="stylesheet" href="https://cdn.chand.web.id/style.css">
+    <style>
+        .tool-page-section {
+            padding: 60px 0;
+            position: relative;
+            z-index: 1;
+        }
+        .form-card {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: left;
+            padding: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+        .form-group input[type="text"],
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background-color: var(--input-bg-color);
+            color: var(--text-color);
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .form-group select {
+            appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%23333" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 12px;
+        }
+        body.dark-mode .form-group select {
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%23e0e0e0" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+        }
+        .form-group input[type="text"]:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 0.25rem rgba(111, 66, 193, 0.25);
+        }
+        body.dark-mode .form-group input[type="text"]:focus,
+        body.dark-mode .form-group select:focus,
+        body.dark-mode .form-group textarea:focus {
+            box-shadow: 0 0 0 0.25rem rgba(167, 139, 250, 0.25);
+        }
+        .result-container {
+            background-color: var(--input-bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            min-height: 100px;
+            color: var(--text-color);
+            font-family: sans-serif;
+            text-align: left;
+            margin-top: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        body.dark-mode .result-container {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .result-container .error-message {
+            color: var(--text-color);
+        }
+        .result-card-content {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+        .result-card-content .thumbnail-wrapper {
+            width: 100%;
+            max-width: 480px;
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+        .result-card-content .thumbnail {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .result-card-content h3 {
+            margin: 10px 0;
+            font-size: 1.5em;
+            color: var(--text-color);
+            text-align: center;
+        }
+        .result-card-content audio,
+        .result-card-content video {
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            background-color: #000;
+        }
+        .result-card-content .download-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            width: 100%;
+        }
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-start;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .button.primary:hover {
+            background-color: var(--button-hover-bg-primary);
+            transform: translateY(-2px);
+        }
+        .button.secondary {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+        }
+        .button.secondary:hover {
+            background-color: var(--button-hover-bg-secondary);
+            transform: translateY(-2px);
+        }
+        .loading-spinner {
+            border: 4px solid var(--border-color);
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 10px;
+            display: none;
+        }
+        .dark-mode .loading-spinner {
+            border-color: var(--border-color);
+            border-top-color: var(--primary-color);
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -2;
+            background: linear-gradient(135deg, var(--primary-color) 0%, #8a2be2 100%);
+            opacity: 0.1;
+        }
+        body.dark-mode #particles-js {
+            background: linear-gradient(135deg, var(--background-color) 0%, var(--surface-color) 100%);
+            opacity: 0.2;
+        }
+        @media (max-width: 768px) {
+            .form-card {
+                padding: 25px;
+            }
+            .form-group input[type="text"],
+            .form-group select {
+                font-size: 15px;
+                padding: 10px;
+            }
+            .button {
+                font-size: 16px;
+                padding: 10px 20px;
+            }
+            .button-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .result-card-content h3 {
+                font-size: 1.3em;
+            }
+        }
+        @media (max-width: 480px) {
+            .form-card {
+                padding: 20px;
+            }
+            .form-group input[type="text"],
+            .form-group select {
+                font-size: 14px;
+                padding: 8px;
+            }
+            .button {
+                font-size: 14px;
+                padding: 8px 15px;
+            }
+            .result-card-content {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="/" class="logo">Freetools</a>
+            <div class="header-controls">
+                <button class="dark-mode-toggle" aria-label="Toggle dark mode">🌙</button>
+                <button class="hamburger" aria-label="Toggle navigation" aria-controls="nav-menu" aria-expanded="false">
+                    <span class="hamburger-box">
+                        <span class="hamburger-inner"></span>
+                    </span>
+                </button>
+            </div>
+            <nav class="nav-menu" id="nav-menu" role="navigation">
+                <ul>
+                    <li><a href="/" class="nav-link">Beranda</a></li>
+                    <li><a href="/qris" class="nav-link">QRIS Generator</a></li>
+                    <li><a href="/base64" class="nav-link">Base64 Tool</a></li>
+                    <li><a href="/status-checker" class="nav-link">Cek Status Website</a></li>
+                    <li><a href="/obfuscator" class="nav-link">JS Obfuscator</a></li>
+                    <li><a href="/ascii" class="nav-link">ASCII Art</a></li>
+                    <li><a href="/notepad" class="nav-link">Temporary Notepad</a></li>
+                    <li><a href="/api-testing" class="nav-link">API Testing Tool</a></li>
+                    <li><a href="/dns-lookup" class="nav-link">DNS Lookup</a></li>
+                    <li><a href="/sub-finder" class="nav-link">Subdomain Finder</a></li>
+                    <li><a href="/check-port" class="nav-link">Cek Open Port</a></li>
+                    <li><a href="/ai" class="nav-link">AI Gratis</a></li>
+                    <li><a href="/caklontong" class="nav-link">Cak Lontong</a></li>
+                    <li><a href="/imagetoascii" class="nav-link">Image To Ascii</a></li>
+                    <li><a href="/siapakahaku" class="nav-link">Siapa Kah Aku</a></li>
+                    <li><a href="/yt-downloader" class="nav-link">Youtube Downloader</a></li>
+                    <li><a href="/tt-downloader/" class="nav-link">TikTok Downloader</a></li>
+                    <li><a href="/view-source" class="nav-link">View Source</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <div id="particles-js"></div>
+        <section class="tool-page-section">
+            <div class="container">
+                <div class="form-card">
+                    <h1>YouTube Downloader</h1>
+                    <div class="form-group">
+                        <label for="youtubeUrl">Masukkan URL Video YouTube:</label>
+                        <input type="text" id="youtubeUrl" placeholder="Contoh: https://www.youtube.com/watch?v=dQw4w9WgXcQ">
+                    </div>
+                    <div class="form-group">
+                        <label for="downloadFormat">Pilih Format:</label>
+                        <select id="downloadFormat">
+                            <option value="mp3">MP3 (Audio)</option>
+                            <option value="mp4">MP4 (Video)</option>
+                        </select>
+                    </div>
+                    <div class="button-group">
+                        <button id="downloadBtn" class="button primary">Unduh <span class="loading-spinner"></span></button>
+                    </div>
+                    <div id="resultContainer" class="result-container" style="display:none;"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© <span id="current-year"></span> ChandStore. Semua hak cipta dilindungi.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+        const darkModeToggle = document.querySelector('.dark-mode-toggle');
+        const body = document.body;
+
+        function setDarkMode(isDark) {
+            if (isDark) {
+                body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️';
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌙';
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        }
+
+        const savedDarkMode = localStorage.getItem('darkMode');
+        if (savedDarkMode === 'enabled') {
+            setDarkMode(true);
+        } else {
+            setDarkMode(false);
+        }
+
+        darkModeToggle.addEventListener('click', () => {
+            setDarkMode(!body.classList.contains('dark-mode'));
+        });
+
+        hamburger.addEventListener('click', () => {
+            const isExpanded = hamburger.getAttribute('aria-expanded') === 'true';
+            hamburger.setAttribute('aria-expanded', !isExpanded);
+            hamburger.classList.toggle('is-active');
+            navMenu.classList.toggle('is-active');
+            body.classList.toggle('nav-open');
+        });
+
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768 && navMenu.classList.contains('is-active')) {
+                    hamburger.classList.remove('is-active');
+                    hamburger.setAttribute('aria-expanded', 'false');
+                    navMenu.classList.remove('is-active');
+                    body.classList.remove('nav-open');
+                }
+            });
+        });
+
+        particlesJS('particles-js', {
+            'particles': {
+                'number': {
+                    'value': 80,
+                    'density': {
+                        'enable': true,
+                        'value_area': 800
+                    }
+                },
+                'color': {
+                    'value': '#ffffff'
+                },
+                'shape': {
+                    'type': 'circle',
+                    'stroke': {
+                        'width': 0,
+                        'color': '#000000'
+                    },
+                    'polygon': {
+                        'nb_sides': 5
+                    }
+                },
+                'opacity': {
+                    'value': 0.5,
+                    'random': false,
+                    'anim': {
+                        'enable': false,
+                        'speed': 1,
+                        'opacity_min': 0.1,
+                        'sync': false
+                    }
+                },
+                'size': {
+                    'value': 3,
+                    'random': true,
+                    'anim': {
+                        'enable': false,
+                        'speed': 40,
+                        'size_min': 0.1,
+                        'sync': false
+                    }
+                },
+                'line_linked': {
+                    'enable': true,
+                    'distance': 150,
+                    'color': '#ffffff',
+                    'opacity': 0.4,
+                    'width': 1
+                },
+                'move': {
+                    'enable': true,
+                    'speed': 6,
+                    'direction': 'none',
+                    'random': false,
+                    'straight': false,
+                    'out_mode': 'out',
+                    'bounce': false,
+                    'attract': {
+                        'enable': false,
+                        'rotateX': 600,
+                        'rotateY': 1200
+                    }
+                }
+            },
+            'interactivity': {
+                'detect_on': 'canvas',
+                'events': {
+                    'onhover': {
+                        'enable': true,
+                        'mode': 'repulse'
+                    },
+                    'onclick': {
+                        'enable': true,
+                        'mode': 'push'
+                    },
+                    'resize': true
+                },
+                'modes': {
+                    'grab': {
+                        'distance': 400,
+                        'line_linked': {
+                            'opacity': 1
+                        }
+                    },
+                    'bubble': {
+                        'distance': 400,
+                        'size': 40,
+                        'duration': 2,
+                        'opacity': 8,
+                        'speed': 3
+                    },
+                    'repulse': {
+                        'distance': 200,
+                        'duration': 0.4
+                    },
+                    'push': {
+                        'particles_nb': 4
+                    },
+                    'remove': {
+                        'particles_nb': 2
+                    }
+                }
+            },
+            'retina_detect': true
+        });
+
+        const youtubeUrlInput = document.getElementById('youtubeUrl');
+        const downloadFormatSelect = document.getElementById('downloadFormat');
+        const downloadButton = document.getElementById('downloadBtn');
+        const resultContainer = document.getElementById('resultContainer');
+        const loadingSpinner = document.querySelector('.loading-spinner');
+
+        function getVideoId(url) {
+            let videoId = '';
+            const youtubeRegex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i;
+            const match = url.match(youtubeRegex);
+            if (match && match[1]) {
+                videoId = match[1];
+            }
+            return videoId;
+        }
+
+        downloadButton.addEventListener('click', async () => {
+            const url = youtubeUrlInput.value.trim();
+            const format = downloadFormatSelect.value;
+            const videoId = getVideoId(url);
+
+            resultContainer.style.display = 'none';
+            resultContainer.innerHTML = '';
+
+            if (!url) {
+                resultContainer.style.display = 'block';
+                resultContainer.innerHTML = '<div class="error-message">Silakan masukkan URL YouTube.</div>';
+                return;
+            }
+
+            if (!videoId) {
+                resultContainer.style.display = 'block';
+                resultContainer.innerHTML = '<div class="error-message">URL yang dimasukkan bukan URL YouTube yang valid.</div>';
+                return;
+            }
+
+            loadingSpinner.style.display = 'inline-block';
+            downloadButton.disabled = true;
+
+            let apiUrl = '';
+            if (format === 'mp3') {
+                apiUrl = `https://api.siputzx.my.id/api/d/ytmp3?url=${encodeURIComponent(url)}`;
+            } else if (format === 'mp4') {
+                apiUrl = `https://api.siputzx.my.id/api/d/ytmp4?url=${encodeURIComponent(url)}`;
+            }
+
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                if (data.status && data.data && data.data.title && data.data.dl) {
+                    const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+                    const mediaTag = format === 'mp3' ? 'audio' : 'video';
+
+                    resultContainer.style.display = 'block';
+                    resultContainer.innerHTML = `
+                        <div class="result-card-content">
+                            <div class="thumbnail-wrapper">
+                                <img src="${thumbnailUrl}" alt="Video Thumbnail" class="thumbnail">
+                            </div>
+                            <h3>${data.data.title}</h3>
+                            <${mediaTag} controls src="${data.data.dl}" ${format === 'mp4' ? 'poster="' + thumbnailUrl + '"' : ''}></${mediaTag}>
+                            <div class="download-actions">
+                                <a href="${data.data.dl}" class="button primary" download>Unduh ${format.toUpperCase()}</a>
+                                <button class="button secondary" onclick="copyToClipboard('${data.data.dl}', this)">Salin Link</button>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    resultContainer.style.display = 'block';
+                    resultContainer.innerHTML = `<div class="error-message">Gagal mendapatkan informasi unduhan. Pesan: ${data.message || 'Respons API tidak valid.'}</div>`;
+                }
+            } catch (error) {
+                resultContainer.style.display = 'block';
+                resultContainer.innerHTML = `<div class="error-message">Terjadi kesalahan jaringan atau API: ${error.message}.</div>`;
+            } finally {
+                loadingSpinner.style.display = 'none';
+                downloadButton.disabled = false;
+            }
+        });
+
+        function copyToClipboard(text, buttonElement) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = buttonElement.textContent;
+                buttonElement.textContent = 'Link Disalin!';
+                setTimeout(() => {
+                    buttonElement.textContent = originalText;
+                }, 2000);
+            }).catch(err => {
+                alert('Gagal menyalin link. Pastikan Anda memberikan izin salin pada browser.');
+            });
+        }
+    </script>
+    <script src="https://cdn.chand.web.id/assets/scripts/ads.js"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FP4WNMD2G9"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-FP4WNMD2G9');
+    </script>
+    <script>
+        var ahrefs_analytics_script = document.createElement('script');
+        ahrefs_analytics_script.async = true;
+        ahrefs_analytics_script.src = 'https://analytics.ahrefs.com/analytics.js';
+        ahrefs_analytics_script.setAttribute('data-key', 'csEnCRq92VrwGM0PP481yg');
+        document.getElementsByTagName('head')[0].appendChild(ahrefs_analytics_script);
+    </script>
+</body>
+</html>

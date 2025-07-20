@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <script src="https://cdn.chand.web.id/anti_inspect.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASCII Text Art Generator - Freetools</title>
+    <meta name="description" content="Ubah teks biasa menjadi karya seni berbasis karakter (ASCII Art) dengan cepat dan gratis menggunakan generator online Freetools.">
+    <meta name="keywords" content="ascii art generator, text art, ascii text converter, online tool, free ascii tool, bikin ascii art, generator teks ascii, alat online gratis, freetools">
+    <meta name="author" content="ChandStore">
+    <meta property="og:title" content="ASCII Text Art Generator - Freetools">
+    <meta property="og:description" content="Buat ASCII art keren dari teks apapun secara gratis dan instan. Coba generator ASCII art Freetools sekarang!">
+    <meta property="og:image" content="https://freetools.web.id/icon.ico">
+    <meta property="og:url" content="https://freetools.web.id/ascii">
+    <meta property="og:type" content="website">
+    <link rel="canonical" href="https://freetools.web.id/ascii">
+    <link rel="icon" type="image/x-icon" href="https://cdn.chand.web.id/icon.ico">
+    <link rel="stylesheet" href="https://cdn.chand.web.id/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="/" class="logo">Freetools</a>
+            <div class="header-controls">
+                <button class="dark-mode-toggle" aria-label="Toggle dark mode">🌙</button>
+                <button class="hamburger" aria-label="Toggle navigation" aria-controls="nav-menu" aria-expanded="false">
+                    <span class="hamburger-box">
+                        <span class="hamburger-inner"></span>
+                    </span>
+                </button>
+            </div>
+            <nav class="nav-menu" id="nav-menu" role="navigation">
+                <ul>
+                    <li><a href="/" class="nav-link">Beranda</a></li>
+                    <li><a href="/qris" class="nav-link">QRIS Generator</a></li>
+                    <li><a href="/base64" class="nav-link">Base64 Tool</a></li>
+                    <li><a href="/status-checker" class="nav-link">Cek Status Website</a></li>
+                    <li><a href="/obfuscator" class="nav-link">JS Obfuscator</a></li>
+                    <li><a href="/ascii" class="nav-link">ASCII Art</a></li>
+                    <li><a href="/notepad" class="nav-link">Temporary Notepad</a></li>
+                    <li><a href="/api-testing" class="nav-link">API Testing Tool</a></li>
+                    <li><a href="/dns-lookup" class="nav-link">DNS Lookup</a></li>
+                    <li><a href="/sub-finder" class="nav-link">Subdomain Finder</a></li>
+                    <li><a href="/check-port" class="nav-link">Cek Open Port</a></li>
+                    <li><a href="/ai" class="nav-link">AI Gratis</a></li>
+                    <li><a href="/caklontong" class="nav-link">Cak Lontong</a></li>
+                    <li><a href="/imagetoascii" class="nav-link">Image To Ascii</a></li>
+                    <li><a href="/siapakahaku" class="nav-link">Siapa Kah Aku</a></li>
+                    <li><a href="/yt-downloader" class="nav-link">Youtube Downloader</a></li>
+                    <li><a href="/tt-downloader/" class="nav-link">TikTok Downloader</a></li>
+                    <li><a href="/view-source" class="nav-link">View Source</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <section class="tool-page-section">
+            <div class="container">
+                <h1>Generator ASCII Text Art</h1>
+                <div class="form-card">
+                    <p>Masukkan teks yang ingin Anda ubah menjadi ASCII Art.</p>
+                    <div class="input-group">
+                        <label for="inputText">Teks Biasa:</label>
+                        <textarea id="inputText" placeholder="Masukkan teks Anda di sini..."></textarea>
+                    </div>
+
+                    <button id="generateBtn" class="button primary">Generate ASCII Art</button>
+
+                    <div id="outputArea" class="ascii-output hidden">
+                        <h4>Hasil ASCII Art:</h4>
+                        <div class="ascii-output-group">
+                            <pre id="asciiOutput"></pre>
+                        </div>
+                        <button id="copyBtn" class="button secondary hidden">Copy ASCII Art</button>
+                    </div>
+
+                    <p id="errorMsg" class="status-text" style="color: var(--primary-color);"></p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© <span id="current-year"></span> ChandStore. Semua hak cipta dilindungi.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+        const darkModeToggle = document.querySelector('.dark-mode-toggle');
+        const body = document.body;
+
+        function setDarkMode(isDark) {
+            if (isDark) {
+                body.classList.add('dark-mode');
+                if (darkModeToggle) darkModeToggle.textContent = '☀️';
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                body.classList.remove('dark-mode');
+                if (darkModeToggle) darkModeToggle.textContent = '🌙';
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        }
+        const savedDarkMode = localStorage.getItem('darkMode');
+        if (savedDarkMode === 'enabled') {
+            setDarkMode(true);
+        } else {
+            setDarkMode(false);
+        }
+        if (darkModeToggle) {
+            darkModeToggle.addEventListener('click', () => {
+                setDarkMode(!body.classList.contains('dark-mode'));
+            });
+        }
+        if (hamburger && navMenu) {
+            hamburger.addEventListener('click', () => {
+                const isExpanded = hamburger.getAttribute('aria-expanded') === 'true';
+                hamburger.setAttribute('aria-expanded', !isExpanded);
+                hamburger.classList.toggle('is-active');
+                navMenu.classList.toggle('is-active');
+                body.classList.toggle('nav-open');
+            });
+        }
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768 && hamburger && navMenu) {
+                    hamburger.classList.remove('is-active');
+                    hamburger.setAttribute('aria-expanded', 'false');
+                    navMenu.classList.remove('is-active');
+                    body.classList.remove('nav-open');
+                }
+            });
+        });
+
+        const inputTextarea = document.getElementById('inputText');
+        const generateBtn = document.getElementById('generateBtn');
+        const outputArea = document.getElementById('outputArea');
+        const asciiOutputPre = document.getElementById('asciiOutput');
+        const copyBtn = document.getElementById('copyBtn');
+        const errorMsg = document.getElementById('errorMsg');
+
+        if (generateBtn) {
+            generateBtn.addEventListener('click', async () => {
+                const text = inputTextarea.value.trim();
+                errorMsg.textContent = '';
+                outputArea.classList.add('hidden');
+                copyBtn.classList.add('hidden');
+                asciiOutputPre.textContent = '';
+                generateBtn.disabled = true;
+                generateBtn.textContent = 'Generating...';
+
+                if (!text) {
+                    errorMsg.textContent = 'Mohon masukkan teks untuk diubah ke ASCII Art.';
+                    generateBtn.disabled = false;
+                    generateBtn.textContent = 'Generate ASCII Art';
+                    return;
+                }
+
+                try {
+                    const response = await axios.post('/api/generate-ascii', { text: text });
+                    if (response.data && response.data.asciiArt) {
+                        asciiOutputPre.textContent = response.data.asciiArt;
+                        outputArea.classList.remove('hidden');
+                        copyBtn.classList.remove('hidden');
+                    } else {
+                        errorMsg.textContent = 'Terjadi kesalahan saat menghasilkan ASCII Art.';
+                    }
+                } catch (error) {
+                    if (error.response && error.response.data && error.response.data.error) {
+                        errorMsg.textContent = `Error: ${error.response.data.error}`;
+                    } else {
+                        errorMsg.textContent = 'Gagal terhubung ke server atau terjadi kesalahan yang tidak diketahui.';
+                    }
+                } finally {
+                    generateBtn.disabled = false;
+                    generateBtn.textContent = 'Generate ASCII Art';
+                }
+            });
+        }
+
+        if (copyBtn) {
+            copyBtn.addEventListener('click', async () => {
+                const textToCopy = asciiOutputPre.textContent;
+                try {
+                    await navigator.clipboard.writeText(textToCopy);
+                    copyBtn.textContent = 'Copied!';
+                    setTimeout(() => {
+                        copyBtn.textContent = 'Copy ASCII Art';
+                    }, 2000);
+                } catch (err) {
+                    copyBtn.textContent = 'Failed to copy';
+                    setTimeout(() => {
+                        copyBtn.textContent = 'Copy ASCII Art';
+                    }, 2000);
+                }
+            });
+        }
+    </script>
+    <script src="https://cdn.chand.web.id/assets/scripts/ads.js"></script>
+</body>
+</html>
