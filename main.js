@@ -225,12 +225,8 @@ const captchaRequestRateLimiter = (req, res, next) => {
 
 app.use(compression({ level: 9 }));
 app.use(cors());
-app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'public'));
 
 const getBaseUrl = (req) => {
   const protocol = req.headers['x-forwarded-proto'] || req.protocol;
@@ -274,86 +270,6 @@ const blockedServerHosts = (req) => {
   const serverHost = getServerHostname(req);
   return ['freetools.web.id', serverHost, 'localhost', '127.0.0.1'].filter(Boolean).map(h => h.toLowerCase());
 };
-
-app.get('/', (req, res) => {
-  res.render('index');
-});
-
-app.get('/qris', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'qris.html'));
-});
-
-app.get('/base64', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'base64.html'));
-});
-
-app.get('/status-checker', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'status-checker.html'));
-});
-
-app.get('/obfuscator', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'obfuscator.html'));
-});
-
-app.get('/ascii', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'ascii.html'));
-});
-
-app.get('/notepad', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'notepad.html'));
-});
-
-app.get('/api-testing', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'api_testing.html'));
-});
-
-app.get('/dns-lookup', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'dns-lookup.html'));
-});
-
-app.get('/sub-finder', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'subfinder.html'));
-});
-
-app.get('/check-port', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'check_port.html'));
-});
-
-app.get('/ai', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'ai.html'));
-});
-
-app.get('/caklontong', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'caklontong.html'));
-});
-
-app.get('/imagetoascii', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'imgtoascii.html'));
-});
-
-app.get('/siapakahaku', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'siapakahaku.html'));
-});
-
-app.get('/yt-downloader', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'ytdownload.html'));
-});
-
-app.get('/tt-downloader', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'tt-download.html'));
-});
-
-app.get('/view-source', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'view-source.html'));
-});
-
-app.get('/:code', (req, res) => {
-  const code = req.params.code;
-  if (notesData.notes[code]) {
-    return res.sendFile(path.join(__dirname, 'public', 'notepad.html'));
-  }
-  res.sendFile(path.join(__dirname, 'public', '404.html'));
-});
 
 app.get('/api/suggestions', async (req, res) => {
   const currentSuggestions = await fetchSuggestionsFromBin();

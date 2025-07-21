@@ -1,4 +1,0 @@
-User-agent: *
-Disallow: /api/create-note
-Disallow: /api/shorten-url
-Sitemap: https://freetools.web.id/sitemap.xml
