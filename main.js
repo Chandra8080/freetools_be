@@ -252,12 +252,18 @@ const validateReferer = (req, res, next) => {
 
   try {
     const refererUrl = new URL(refererHeader);
-    if (refererUrl.hostname.toLowerCase() !== expectedHostname.toLowerCase()) {
+    const refererHostname = refererUrl.hostname.toLowerCase();
+
+    if (
+      refererHostname !== 'freetools.web.id' &&
+      refererHostname !== expectedHostname.toLowerCase()
+    ) {
       return res.status(403).json({ error: 'Akses ditolak: Permintaan harus berasal dari website ini.' });
     }
   } catch (e) {
     return res.status(403).json({ error: 'Akses ditolak: Referer tidak valid.' });
   }
+
   next();
 };
 
